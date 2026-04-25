@@ -1,0 +1,14 @@
+unstructured
+tiktoken
+pinecone
+pypdf
+openai
+langchain
+langchain-classic
+langchain-community
+langchain-openai
+langchain-text-splitters
+sentence-transformers
+python-dotenv
+pandas
+numpy
