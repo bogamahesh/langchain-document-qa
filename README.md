@@ -19,8 +19,8 @@ A complete **Retrieval-Augmented Generation (RAG)** pipeline built with LangChai
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/bogamahesh/langchain-document-qa.git
+   cd langchain-document-qa
    ```
 
 2. **Create a virtual environment**
