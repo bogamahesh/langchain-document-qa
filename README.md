@@ -1,5 +1,8 @@
 # LangChain Document Q&A
 
+![Python](https://img.shields.io/badge/python-3.9%2B-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
 A Retrieval-Augmented Generation (RAG) PDF question-answering app that indexes local documents with ChromaDB and answers questions using the Gemini API.
 
 ## Architecture
