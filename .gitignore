@@ -20,3 +20,6 @@ __pycache__/
 # Models
 get_models.py
 free_models.txt
+
+# Local vector database
+chroma_db/

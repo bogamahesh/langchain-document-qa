@@ -1,55 +1,166 @@
-# 📚 AI PDF Assistant (RAG Pipeline)
+# LangChain Document Q&A
 
-A complete **Retrieval-Augmented Generation (RAG)** pipeline built with LangChain that allows you to "chat" with your PDF documents. The system reads your PDFs, converts them into vector embeddings, stores them in a Pinecone database, and uses advanced Large Language Models (LLMs) to accurately answer questions based on the document's content.
+A Retrieval-Augmented Generation (RAG) PDF question-answering app that indexes local documents with ChromaDB and answers questions using the Gemini API.
 
-## 🚀 Features
-* **Document Processing:** Automatically loads and splits large PDF documents into manageable chunks.
-* **Local Embeddings:** Uses free, local HuggingFace embeddings (`all-MiniLM-L6-v2`) to maintain privacy and eliminate embedding API costs.
-* **Vector Database:** Integrates with Pinecone Vector Database for lightning-fast cosine-similarity searches.
-* **Dynamic LLM Routing:** Uses OpenRouter to automatically route questions to the fastest available free open-source models (like Llama 3 or Gemma) to prevent rate-limiting.
+## Architecture
 
-## 🛠️ Technology Stack
-* **Python 3**
-* **LangChain** (Framework)
-* **Pinecone** (Vector Database)
-* **HuggingFace** (Local Embeddings)
-* **OpenRouter** (Cloud LLM API)
+```text
+PDF input
+   |
+   v
+Text extraction from documents/
+   |
+   v
+Text chunking
+   |
+   v
+Gemini embedding model
+   |
+   v
+ChromaDB vector store
+   |
+   v
+Similarity retrieval
+   |
+   v
+Gemini API
+   |
+   v
+Answer output with source chunks
+```
 
-## ⚙️ Installation & Setup
+## Tech Stack
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/bogamahesh/langchain-document-qa.git
-   cd langchain-document-qa
-   ```
+- Python
+- LangChain
+- Streamlit
+- ChromaDB
+- Google Gemini API
+- Google Gemini embeddings
+- PyPDF
+- python-dotenv
 
-2. **Create a virtual environment**
-   ```bash
-   python -m venv .venv
-   source .venv/Scripts/activate  # On Windows
-   ```
+## Installation
 
-3. **Install Dependencies**
-   Make sure you install the required packages (you can generate a `requirements.txt` from your environment):
-   ```bash
-   pip install langchain langchain-classic langchain-openai langchain-community pinecone-client pypdf sentence-transformers python-dotenv requests
-   ```
+1. Clone the repository.
 
-4. **Set up API Keys**
-   Create a new file named `.env` in the root folder, using `.env.example` as a template:
-   ```env
-   PINECONE_API_KEY="your_actual_pinecone_key"
-   OPENROUTER_API_KEY="your_actual_openrouter_key"
-   ```
+```bash
+git clone https://github.com/bogamahesh/langchain-document-qa.git
+cd langchain-document-qa
+```
 
-5. **Add Documents**
-   Place the PDFs you want to analyze inside a folder named `documents/` in the root directory.
+2. Create and activate a virtual environment.
 
-## 🧠 Usage
-Open the Jupyter Notebook (`langchain.ipynb`) and run the cells sequentially. 
-1. The script will read your PDFs.
-2. It will embed the text and push it to your Pinecone index.
-3. Scroll to the bottom to change the `query` variable and ask your AI anything about the document!
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
 
-## 📜 License
-This project is open-source and available under the MIT License.
+On macOS or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+3. Install dependencies.
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Create a `.env` file.
+
+```bash
+copy .env.example .env
+```
+
+On macOS or Linux:
+
+```bash
+cp .env.example .env
+```
+
+5. Add your Gemini API key to `.env`.
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-1.5-flash
+GEMINI_EMBEDDING_MODEL=models/embedding-001
+```
+
+6. Place one or more PDF files in the `documents/` folder.
+
+## Usage
+
+Run the Streamlit app:
+
+```bash
+streamlit run app.py
+```
+
+Then:
+
+1. Click `Index PDFs` in the sidebar.
+2. Wait for the app to read PDFs, split text, create embeddings, and store vectors in ChromaDB.
+3. Ask a natural-language question about the indexed PDFs.
+4. Review the generated answer and the retrieved source chunks.
+
+If Streamlit is not available in your environment, run the plain HTML fallback:
+
+```bash
+python simple_app.py
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
+
+## Example
+
+Example question:
+
+```text
+What is the main topic of the document?
+```
+
+Example answer:
+
+```text
+The document explains how Retrieval-Augmented Generation connects PDF text,
+embeddings, vector search, and a Gemini language model to answer questions
+using the document as context.
+```
+
+Example retrieved source:
+
+```text
+documents/sample.pdf, page 2
+The application loads PDF pages, splits them into chunks, stores embeddings in
+ChromaDB, and retrieves the most relevant chunks for each user question.
+```
+
+## Project Structure
+
+```text
+.
+|-- app.py              # Streamlit RAG application
+|-- simple_app.py       # Minimal HTML fallback app
+|-- documents/          # Local PDF input folder
+|-- requirements.txt    # Python dependencies
+|-- .env.example        # Environment variable template
+|-- langchain.ipynb     # Notebook version of the RAG flow
+|-- LICENSE
+`-- README.md
+```
+
+## Notes
+
+- The ChromaDB index is created locally in `chroma_db/` after indexing PDFs.
+- `.env` and `chroma_db/` are intentionally ignored by Git.
+- Answers are grounded in retrieved PDF chunks; if the answer is not present in the retrieved context, the app is instructed to say so.
+
+## License
+
+This project is available under the MIT License.
